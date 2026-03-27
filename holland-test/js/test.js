@@ -134,21 +134,25 @@ const typeInfo = {
 let currentQuestion = 0;
 let answers = {};
 
-// DOM 元素
-const welcomeSection = document.getElementById('welcome-section');
-const testSection = document.getElementById('test-section');
-const loadingSection = document.getElementById('loading-section');
-const startBtn = document.getElementById('start-btn');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-const questionText = document.getElementById('question-text');
-const currentQuestionEl = document.getElementById('current-question');
-const progressFill = document.getElementById('progress-fill');
-const optionInputs = document.querySelectorAll('input[name="answer"]');
-const optionLabels = document.querySelectorAll('.option');
+// DOM 元素（延迟获取）
+let welcomeSection, testSection, loadingSection, startBtn, prevBtn, nextBtn;
+let questionText, currentQuestionEl, progressFill, optionInputs, optionLabels;
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
+    // 在 DOM 加载完成后获取元素
+    welcomeSection = document.getElementById('welcome-section');
+    testSection = document.getElementById('test-section');
+    loadingSection = document.getElementById('loading-section');
+    startBtn = document.getElementById('start-btn');
+    prevBtn = document.getElementById('prev-btn');
+    nextBtn = document.getElementById('next-btn');
+    questionText = document.getElementById('question-text');
+    currentQuestionEl = document.getElementById('current-question');
+    progressFill = document.getElementById('progress-fill');
+    optionInputs = document.querySelectorAll('input[name="answer"]');
+    optionLabels = document.querySelectorAll('.option');
+    
     initEventListeners();
 });
 

@@ -312,7 +312,7 @@ function submitTest() {
     
     // 模拟加载延迟
     setTimeout(() => {
-        window.location.href = 'result.html';
+        window.location.href = '/holland-test/result.html';
     }, 1500);
 }
 

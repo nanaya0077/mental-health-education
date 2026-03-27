@@ -140,6 +140,8 @@ let questionText, currentQuestionEl, progressFill, optionInputs, optionLabels;
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded');
+    
     // 在 DOM 加载完成后获取元素
     welcomeSection = document.getElementById('welcome-section');
     testSection = document.getElementById('test-section');
@@ -153,34 +155,60 @@ document.addEventListener('DOMContentLoaded', () => {
     optionInputs = document.querySelectorAll('input[name="answer"]');
     optionLabels = document.querySelectorAll('.option');
     
+    console.log('startBtn:', startBtn);
+    console.log('testSection:', testSection);
+    
     initEventListeners();
 });
 
 function initEventListeners() {
     // 开始测试按钮
-    startBtn.addEventListener('click', startTest);
+    if (startBtn) {
+        startBtn.addEventListener('click', function(e) {
+            console.log('Start button clicked');
+            e.preventDefault();
+            startTest();
+        });
+        console.log('Start button listener attached');
+    } else {
+        console.error('Start button not found!');
+    }
     
     // 上一题/下一题按钮
-    prevBtn.addEventListener('click', goToPrevQuestion);
-    nextBtn.addEventListener('click', goToNextQuestion);
+    if (prevBtn) {
+        prevBtn.addEventListener('click', goToPrevQuestion);
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', goToNextQuestion);
+    }
     
     // 选项点击事件
-    optionLabels.forEach((label, index) => {
-        label.addEventListener('click', () => {
-            selectOption(index + 1);
+    if (optionLabels && optionLabels.length > 0) {
+        optionLabels.forEach((label, index) => {
+            label.addEventListener('click', () => {
+                selectOption(index + 1);
+            });
         });
-    });
+    }
     
     // 键盘导航
     document.addEventListener('keydown', handleKeyboard);
 }
 
 function startTest() {
-    welcomeSection.classList.remove('active');
-    testSection.classList.add('active');
-    currentQuestion = 0;
-    answers = {};
-    renderQuestion();
+    console.log('startTest called');
+    console.log('welcomeSection:', welcomeSection);
+    console.log('testSection:', testSection);
+    
+    if (welcomeSection && testSection) {
+        welcomeSection.classList.remove('active');
+        testSection.classList.add('active');
+        currentQuestion = 0;
+        answers = {};
+        renderQuestion();
+    } else {
+        console.error('Sections not found!');
+    }
 }
 
 function renderQuestion() {

@@ -1,0 +1,24 @@
+{
+  "name": "mental-health-education",
+  "version": "1.0.0",
+  "description": "大学生心理健康课程 - 心理测试平台",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -s . -l $PORT",
+    "dev": "npx serve -s ."
+  },
+  "keywords": [
+    "mental-health",
+    "psychological-test",
+    "holland-code",
+    "education"
+  ],
+  "author": "nanaya0077",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

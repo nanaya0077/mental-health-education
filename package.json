@@ -2,10 +2,10 @@
   "name": "mental-health-education",
   "version": "1.0.0",
   "description": "大学生心理健康课程 - 心理测试平台",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "serve . -l tcp://0.0.0.0:${PORT:-3000}",
-    "dev": "serve ."
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "keywords": [
     "mental-health",
@@ -15,9 +15,6 @@
   ],
   "author": "nanaya0077",
   "license": "MIT",
-  "dependencies": {
-    "serve": "^14.2.0"
-  },
   "engines": {
     "node": ">=16.0.0"
   }

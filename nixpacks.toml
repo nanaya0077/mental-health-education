@@ -1,8 +1,8 @@
 [phases.build]
-cmds = ["npm install"]
+cmds = []
 
 [phases.setup]
 nixPkgs = ["nodejs_20"]
 
 [start]
-cmd = "npx serve . -l $PORT"
+cmd = "node server.js"

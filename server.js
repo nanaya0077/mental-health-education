@@ -28,7 +28,13 @@ const server = http.createServer((req, res) => {
   }
   
   // 构建文件路径
-  const filePath = path.join(__dirname, url);
+  let filePath = path.join(__dirname, url);
+  
+  // 检查路径是否是目录，如果是则添加 index.html
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    filePath = path.join(filePath, 'index.html');
+  }
+  
   const ext = path.extname(filePath).toLowerCase();
   const contentType = mimeTypes[ext] || 'application/octet-stream';
   

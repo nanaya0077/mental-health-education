@@ -4,8 +4,8 @@
   "description": "大学生心理健康课程 - 心理测试平台",
   "main": "index.html",
   "scripts": {
-    "start": "serve -s . -l tcp://0.0.0.0:${PORT:-3000}",
-    "dev": "serve -s ."
+    "start": "serve . -l tcp://0.0.0.0:${PORT:-3000}",
+    "dev": "serve ."
   },
   "keywords": [
     "mental-health",

@@ -5,4 +5,4 @@ cmds = ["npm install"]
 nixPkgs = ["nodejs_20"]
 
 [start]
-cmd = "npm start"
+cmd = "npx serve . -l $PORT"

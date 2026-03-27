@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>霍兰德职业兴趣测试</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 欢迎页面 -->
+        <section id="welcome-section" class="section active">
+            <div class="welcome-card">
+                <div class="header-icon">🎯</div>
+                <h1>霍兰德职业兴趣测试</h1>
+                <p class="subtitle">Holland Code Career Test</p>
+                
+                <div class="intro-box">
+                    <h3>📋 测试说明</h3>
+                    <ul>
+                        <li>本测试共 <strong>60道题目</strong>，涵盖6种职业兴趣类型</li>
+                        <li>预计完成时间：<strong>10-15分钟</strong></li>
+                        <li>请根据你的真实想法回答，不要过多思考</li>
+                        <li>每道题有5个选项，从"非常不喜欢"到"非常喜欢"</li>
+                    </ul>
+                </div>
+
+                <div class="types-preview">
+                    <h3>🎨 六种职业兴趣类型</h3>
+                    <div class="type-tags">
+                        <span class="type-tag r">现实型 R</span>
+                        <span class="type-tag i">研究型 I</span>
+                        <span class="type-tag a">艺术型 A</span>
+                        <span class="type-tag s">社会型 S</span>
+                        <span class="type-tag e">企业型 E</span>
+                        <span class="type-tag c">常规型 C</span>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="btn-primary">开始测试</button>
+                <a href="../index.html" class="btn-secondary">返回首页</a>
+            </div>
+        </section>
+
+        <!-- 测试页面 -->
+        <section id="test-section" class="section">
+            <div class="test-header">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="current-question">1</span> / <span id="total-questions">60</span>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h2 id="question-text">题目加载中...</h2>
+                
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="answer" value="1">
+                        <span class="option-text">非常不喜欢</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="answer" value="2">
+                        <span class="option-text">比较不喜欢</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="answer" value="3">
+                        <span class="option-text">一般</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="answer" value="4">
+                        <span class="option-text">比较喜欢</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="answer" value="5">
+                        <span class="option-text">非常喜欢</span>
+                    </label>
+                </div>
+
+                <div class="navigation">
+                    <button id="prev-btn" class="btn-secondary" disabled>上一题</button>
+                    <button id="next-btn" class="btn-primary" disabled>下一题</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 加载页面 -->
+        <section id="loading-section" class="section">
+            <div class="loading-card">
+                <div class="spinner"></div>
+                <h2>正在分析你的职业兴趣...</h2>
+                <p>请稍候，我们正在生成你的专属报告</p>
+            </div>
+        </section>
+    </div>
+
+    <script src="js/test.js"></script>
+</body>
+</html>

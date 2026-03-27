@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>霍兰德职业兴趣测试结果</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="no-result" class="section active" style="text-align: center; padding: 100px 20px;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">📋</div>
+            <h2>暂无测试结果</h2>
+            <p style="color: #666; margin: 20px 0;">请先完成霍兰德职业兴趣测试</p>
+            <a href="index.html" class="btn-primary">前往测试</a>
+        </div>
+
+        <div id="result-content" class="section">
+            <!-- 结果头部 -->
+            <div class="result-header">
+                <h1>🎯 你的霍兰德职业兴趣代码</h1>
+                <div class="holland-code" id="holland-code">---</div>
+                <p id="code-description">正在分析...</p>
+            </div>
+
+            <!-- 雷达图 -->
+            <div class="result-section">
+                <h2>📊 六维能力雷达图</h2>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 分数详情 -->
+            <div class="result-section">
+                <h2>📈 各维度得分</h2>
+                <div id="score-bars">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <!-- 类型详解 -->
+            <div class="result-section">
+                <h2>🎨 你的职业兴趣类型详解</h2>
+                <div id="type-details" class="type-details">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <!-- 职业推荐 -->
+            <div class="result-section">
+                <h2>💼 适合你的职业方向</h2>
+                <p style="margin-bottom: 20px; color: #666;">基于你的霍兰德代码 <strong id="code-ref">---</strong>，以下职业可能适合你：</p>
+                <div id="career-tags" class="career-tags">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <!-- 专业建议 -->
+            <div class="result-section">
+                <h2>💡 专业选择建议</h2>
+                <div id="major-suggestions">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <!-- 行动按钮 -->
+            <div class="action-buttons">
+                <button onclick="window.print()" class="btn-secondary">打印报告</button>
+                <a href="index.html" class="btn-primary">重新测试</a>
+                <a href="../index.html" class="btn-secondary">返回首页</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 类型详细信息
+        const typeInfo = {
+            R: {
+                name: '现实型',
+                english: 'Realistic',
+                color: '#e74c3c',
+                description: '动手能力强，喜欢具体的任务和实际操作。偏好使用工具、机械或设备，喜欢在户外工作。',
+                characteristics: ['务实', '动手能力强', '喜欢户外活动', '技术导向'],
+                careers: ['工程师', '技术员', '建筑师', '机械师', '电工', '农民', '飞行员', '运动员', '厨师', '园艺师'],
+                majors: ['机械工程', '土木工程', '电气工程', '农业科学', '体育教育', '烹饪艺术', '航空航天', '汽车工程']
+            },
+            I: {
+                name: '研究型',
+                english: 'Investigative',
+                color: '#3498db',
+                description: '善于分析和思考，喜欢探索和理解事物。偏好观察、学习、研究和解决问题。',
+                characteristics: ['理性', '好奇心强', '善于分析', '独立思考'],
+                careers: ['科学家', '研究员', '医生', '程序员', '数据分析师', '心理学家', '药剂师', '大学教授', '实验室技术员', '经济学家'],
+                majors: ['计算机科学', '医学', '心理学', '生物学', '化学', '物理学', '数学', '经济学', '统计学']
+            },
+            A: {
+                name: '艺术型',
+                english: 'Artistic',
+                color: '#9b59b6',
+                description: '富有创造力和想象力，追求自我表达。偏好非结构化的环境，喜欢创作和表演。',
+                characteristics: ['创意', '感性', '追求美感', '不拘一格'],
+                careers: ['设计师', '作家', '音乐家', '演员', '摄影师', '画家', '建筑师', '导演', '编辑', '艺术总监'],
+                majors: ['视觉传达设计', '音乐', '戏剧', '文学', '摄影', '建筑学', '动画', '广告学', '艺术史']
+            },
+            S: {
+                name: '社会型',
+                english: 'Social',
+                color: '#2ecc71',
+                description: '乐于助人，善于与人沟通。偏好教导、治疗、服务他人，喜欢团队合作。',
+                characteristics: ['友善', '善于沟通', '乐于助人', '有同理心'],
+                careers: ['教师', '咨询师', '社工', '护士', '人力资源', '培训师', '客户服务', '公关专员', '治疗师', '牧师'],
+                majors: ['教育学', '心理学', '社会工作', '护理学', '人力资源管理', '传播学', '语言学', '宗教学']
+            },
+            E: {
+                name: '企业型',
+                english: 'Enterprising',
+                color: '#f39c12',
+                description: '领导力强，善于说服和影响他人。偏好组织、管理、领导和达成目标。',
+                characteristics: ['自信', '有领导力', '善于说服', '追求成就'],
+                careers: ['经理', '销售', '律师', '企业家', '政治家', '经理', '房地产经纪人', '投资顾问', '公关经理', '制片人'],
+                majors: ['工商管理', '市场营销', '法学', '国际贸易', '金融学', '酒店管理', '公共管理', '政治学与行政学']
+            },
+            C: {
+                name: '常规型',
+                english: 'Conventional',
+                color: '#1abc9c',
+                description: '细致认真，喜欢有条理和规律的工作。偏好处理数据、遵循程序和注重细节。',
+                characteristics: ['细心', '有条理', '可靠', '注重细节'],
+                careers: ['会计', '行政', '数据录入', '银行职员', '秘书', '审计师', '档案管理员', '税务专员', '统计员', '出纳'],
+                majors: ['会计学', '财务管理', '审计学', '统计学', '档案学', '信息管理与信息系统', '税务学', '行政管理']
+            }
+        };
+
+        // 霍兰德代码解读
+        const codeInterpretations = {
+            'RIA': '你兼具现实操作能力、研究分析精神和艺术创造力，适合从事需要技术背景的研发设计工作。',
+            'RIS': '你擅长技术应用，同时具有研究精神和服务意识，适合医疗技术人员或技术培训师。',
+            'RSE': '你动手能力强，善于社交和领导，适合项目管理或技术销售岗位。',
+            'IAS': '你富有创造力、研究精神和服务意识，适合艺术治疗师或教育研究员。',
+            'IAR': '你兼具研究能力、艺术天赋和动手能力，适合建筑设计师或产品开发。',
+            'ISE': '你善于研究分析，同时具有社交和领导能力，适合科研管理或咨询顾问。',
+            'AIS': '你充满艺术创造力，同时具有研究精神和服务热情，适合艺术教育或心理咨询。',
+            'AIR': '你富有艺术想象力，同时具备研究能力和动手能力，适合工业设计或建筑设计。',
+            'ASE': '你具有艺术天赋、社交能力和领导才能，适合艺术管理或公关策划。',
+            'SIA': '你乐于助人，善于分析，富有创造力，适合教育咨询或艺术治疗。',
+            'SIE': '你具有服务意识、研究精神和领导能力，适合医疗管理或教育管理。',
+            'SAE': '你善于帮助他人，富有艺术感和领导才能，适合社会工作或非营利组织管理。',
+            'EIS': '你具有领导才能、研究精神和服务意识，适合科技创业或教育创业。',
+            'EAS': '你善于领导，富有艺术天赋和服务热情，适合文化传媒或艺术机构管理。',
+            'ERS': '你具有领导能力、动手能力和服务意识，适合社会企业或公益创业。',
+            'CRS': '你细心有条理，同时具有动手能力和服务意识，适合医疗行政或技术支持。',
+            'CIS': '你细致认真，善于研究，乐于助人，适合数据分析或图书馆学。',
+            'CAS': '你注重细节，富有艺术感，善于服务他人，适合艺术行政或博物馆工作。'
+        };
+
+        // 页面加载时获取结果
+        document.addEventListener('DOMContentLoaded', () => {
+            const results = JSON.parse(localStorage.getItem('hollandResults'));
+            
+            if (!results) {
+                document.getElementById('no-result').classList.add('active');
+                document.getElementById('result-content').classList.remove('active');
+                return;
+            }
+            
+            document.getElementById('no-result').classList.remove('active');
+            document.getElementById('result-content').classList.add('active');
+            
+            displayResults(results);
+        });
+
+        function displayResults(results) {
+            const { scores, sortedTypes, hollandCode } = results;
+            
+            // 显示霍兰德代码
+            document.getElementById('holland-code').textContent = hollandCode;
+            document.getElementById('code-ref').textContent = hollandCode;
+            
+            // 显示代码解读
+            const interpretation = codeInterpretations[hollandCode] || 
+                `你的霍兰德代码是${hollandCode}。这意味着你最突出的三种职业兴趣类型是：${typeInfo[sortedTypes[0]].name}、${typeInfo[sortedTypes[1]].name}和${typeInfo[sortedTypes[2]].name}。`;
+            document.getElementById('code-description').textContent = interpretation;
+            
+            // 绘制雷达图
+            drawRadarChart(scores);
+            
+            // 显示分数条
+            displayScoreBars(scores, sortedTypes);
+            
+            // 显示类型详情
+            displayTypeDetails(sortedTypes);
+            
+            // 显示职业推荐
+            displayCareers(sortedTypes);
+            
+            // 显示专业建议
+            displayMajors(sortedTypes);
+        }
+
+        function drawRadarChart(scores) {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['现实型(R)', '研究型(I)', '艺术型(A)', '社会型(S)', '企业型(E)', '常规型(C)'],
+                    datasets: [{
+                        label: '你的得分',
+                        data: [scores.R, scores.I, scores.A, scores.S, scores.E, scores.C],
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(102, 126, 234, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(102, 126, 234, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayScoreBars(scores, sortedTypes) {
+            const container = document.getElementById('score-bars');
+            const types = ['R', 'I', 'A', 'S', 'E', 'C'];
+            
+            container.innerHTML = types.map(type => {
+                const info = typeInfo[type];
+                const score = scores[type];
+                const isTop3 = sortedTypes.slice(0, 3).includes(type);
+                
+                return `
+                    <div class="score-bar">
+                        <div class="score-label">${info.name}</div>
+                        <div class="score-progress">
+                            <div class="score-fill ${type.toLowerCase()}" style="width: ${score}%"></div>
+                        </div>
+                        <div class="score-value" style="color: ${isTop3 ? info.color : '#999'}">${score}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function displayTypeDetails(sortedTypes) {
+            const container = document.getElementById('type-details');
+            
+            container.innerHTML = sortedTypes.slice(0, 3).map((type, index) => {
+                const info = typeInfo[type];
+                const rank = ['第一', '第二', '第三'][index];
+                
+                return `
+                    <div class="type-item ${type.toLowerCase()}">
+                        <h3 style="color: ${info.color}">${rank}：${info.name} (${type}) - ${info.english}</h3>
+                        <p><strong>特点：</strong>${info.description}</p>
+                        <p style="margin-top: 10px;"><strong>性格特征：</strong>${info.characteristics.join('、')}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function displayCareers(sortedTypes) {
+            const container = document.getElementById('career-tags');
+            const careers = new Set();
+            
+            // 收集前三类型的职业
+            sortedTypes.slice(0, 3).forEach(type => {
+                typeInfo[type].careers.forEach(career => careers.add(career));
+            });
+            
+            container.innerHTML = Array.from(careers).slice(0, 15).map(career => 
+                `<span class="career-tag">${career}</span>`
+            ).join('');
+        }
+
+        function displayMajors(sortedTypes) {
+            const container = document.getElementById('major-suggestions');
+            
+            container.innerHTML = sortedTypes.slice(0, 3).map((type, index) => {
+                const info = typeInfo[type];
+                const rank = ['首选', '次选', '备选'][index];
+                
+                return `
+                    <div style="margin-bottom: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px; border-left: 4px solid ${info.color}">
+                        <h4 style="color: ${info.color}; margin-bottom: 10px;">${rank}专业方向（${info.name}型）</h4>
+                        <p style="color: #666; line-height: 1.8;">${info.majors.join('、')}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>

@@ -42,12 +42,12 @@ body {
 
 /* 页面切换 */
 .section {
-    display: none;
+    display: none !important;
     animation: fadeIn 0.5s ease;
 }
 
 .section.active {
-    display: block;
+    display: block !important;
 }
 
 @keyframes fadeIn {
